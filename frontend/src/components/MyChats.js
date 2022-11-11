@@ -11,7 +11,7 @@ import ChatLoading from './ChatLoading';
 import GroupChatModal from './miscellaneous/GroupChatModal';
 
 
-const MyChats = () => {
+const MyChats = ({fetchAgain}) => {
   const [loggedUser, setLoggedUser] = useState();
   const {user,selectedChat, setSelectedChat, chats, setChats} = ChatState();
 
@@ -44,7 +44,7 @@ const MyChats = () => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
     // eslint-disable-next-line
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <Box
@@ -52,7 +52,7 @@ const MyChats = () => {
       flexDir="column"
       alignItems="center"
       p={3}
-      bg="white"
+      bg="#d4ebf3"
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
