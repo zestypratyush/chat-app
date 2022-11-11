@@ -8,6 +8,7 @@ import axios from "axios";
 import { Button } from '@chakra-ui/react';
 import {getSender} from "../config/ChatLogics";
 import ChatLoading from './ChatLoading';
+import GroupChatModal from './miscellaneous/GroupChatModal';
 
 
 const MyChats = () => {
@@ -60,14 +61,14 @@ const MyChats = () => {
         pb={3}
         px={3}
         fontSize={{ base: "28px", md: "30px" }}
-        fontFamily="Work sans"
+        fontFamily="Nunito"
         display="flex"
         w="100%"
         justifyContent="space-between"
         alignItems="center"
       >
         My Chats
-        {/* <GroupChatModal> */}
+        <GroupChatModal>
           <Button
             display="flex"
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
@@ -75,7 +76,7 @@ const MyChats = () => {
           >
             New Group Chat
           </Button>
-        {/* </GroupChatModal> */}
+        </GroupChatModal>
       </Box>
       <Box
         d="flex"
