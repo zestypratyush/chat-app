@@ -5,6 +5,8 @@ import { Box, IconButton, Text, Input, FormControl } from "@chakra-ui/react";
 import { getSenderFull, getSender } from "../config/ChatLogics";
 import { ArrowBackIcon } from "@chakra-ui/icons"; 
 import { useState, useEffect } from "react";  
+import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
+import { Button } from "@chakra-ui/react";
  
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -46,15 +48,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : (
                 <>
                   {selectedChat.chatName.toUpperCase()}
-                  {/* <UpdateGroupChatModal
-                        fetchMessages={fetchMessages}
+                  <UpdateGroupChatModal
+                        // fetchMessages={fetchMessages}
                         fetchAgain={fetchAgain}
                         setFetchAgain={setFetchAgain}
-                      /> */}
+                      />
                 </>
               ))}
           </Text>
-          {/* <Box
+          <Box
             display="flex"
             flexDir="column"
             justifyContent="flex-end"
@@ -65,7 +67,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             borderRadius="lg"
             overflowY="hidden"
           >
-            {loading ? (
+            {/* {loading ? (
               <Spinner
                 size="xl"
                 w={20}
@@ -104,8 +106,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 value={newMessage}
                 onChange={typingHandler}
               />
-            </FormControl>
-          </Box> */}
+            </FormControl> */}
+          </Box>
         </>
       ) : (
         // to get socket.io on same page
