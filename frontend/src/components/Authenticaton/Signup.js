@@ -50,7 +50,7 @@ const Signup = () => {
             "Content-type": "application/json",
           },
         };
-        const { dta } = await axios.post("/api/user",usrData,config); 
+        const { data } = await axios.post("/api/user",usrData,config); 
 
         toast({
           title: "Registration Successful",
@@ -59,8 +59,9 @@ const Signup = () => {
           isClosable: true,
           position: "bottom",
         });
-        localStorage.setItem("userInfo", JSON.stringify(dta));
+        localStorage.setItem("userInfo", JSON.stringify(data));
         setPicLoading(false);
+        window.location.reload()
         history.push("/chats");
       } catch (error) {
         toast({
