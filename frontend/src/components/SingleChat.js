@@ -1,22 +1,119 @@
 import React from "react";
 import ProfileModal from "./miscellaneous/ProfileModal";
 import { ChatState } from "../Context/ChatProvider";
-import { Box, IconButton, Text, Input, FormControl } from "@chakra-ui/react";
+import { Box, IconButton, Text, Input, FormControl, Spinner, useToast } from "@chakra-ui/react";
 import { getSenderFull, getSender } from "../config/ChatLogics";
 import { ArrowBackIcon } from "@chakra-ui/icons"; 
 import { useState, useEffect } from "react";  
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { Button } from "@chakra-ui/react";
+import axios from "axios";
+import "./styles.css";
+import ScrollableChat from "./ScrollableChat";
  
 
-const SingleChat = ({ fetchAgain, setFetchAgain }) => {
+const SingleChat = ({ fetchAgain, setFetchAgain  }) => {
 
-    const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
 
-  const { selectedChat, setSelectedChat, user } =
-    ChatState();
+  const toast = useToast();
+  const { selectedChat, setSelectedChat, user } = ChatState();
+
+  const fetchMessages = async () => {
+    if (!selectedChat) return;
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      setLoading(true);
+
+      const { data } = await axios.get(
+        `/api/message/${selectedChat._id}`,
+        config
+      );
+      setMessages(data);
+      setLoading(false);
+
+      // socket.emit("join chat", selectedChat._id);
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Load the Messages",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+
+    // selectedChatCompare = selectedChat;
+    // eslint-disable-next-line
+  }, [selectedChat]);
+
+  const sendMessage = async (event) => {
+    if (event.key === "Enter" && newMessage) {
+      // socket.emit("stop typing", selectedChat._id);
+      try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        setNewMessage("");
+        const { data } = await axios.post("/api/message",
+          {
+            content: newMessage,
+            chatId: selectedChat,
+          },
+          config
+        );
+        // socket.emit("new message", data);
+        console.log(data)
+        setMessages([...messages, data]);
+      } catch (error) {
+        toast({
+          title: "Error Occured!",
+          description: "Failed to send the Message",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
+    }
+  };
+
+  const typingHandler = (e) => {
+    setNewMessage(e.target.value);
+
+    // if (!socketConnected) return;
+
+    // if (!typing) {
+    //   setTyping(true);
+    //   socket.emit("typing", selectedChat._id);
+    // }
+    // let lastTypingTime = new Date().getTime();
+    // var timerLength = 3000;
+    // setTimeout(() => {
+    //   var timeNow = new Date().getTime();
+    //   var timeDiff = timeNow - lastTypingTime;
+    //   if (timeDiff >= timerLength && typing) {
+    //     socket.emit("stop typing", selectedChat._id);
+    //     setTyping(false);
+    //   }
+    // }, timerLength);
+  };
 
   return (
     <>
@@ -49,9 +146,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <>
                   {selectedChat.chatName.toUpperCase()}
                   <UpdateGroupChatModal
-                        // fetchMessages={fetchMessages}
                         fetchAgain={fetchAgain}
                         setFetchAgain={setFetchAgain}
+                        fetchMessages={fetchMessages}
                       />
                 </>
               ))}
@@ -61,13 +158,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             flexDir="column"
             justifyContent="flex-end"
             p={3}
-            bg="#E8E8E8"
+            bg="#4e8497"
             w="100%"
             h="100%"
             borderRadius="lg"
             overflowY="hidden"
           >
-            {/* {loading ? (
+            {loading ? (
               <Spinner
                 size="xl"
                 w={20}
@@ -87,7 +184,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               isRequired
               mt={3}
             >
-              {istyping ? (
+              {/* {istyping ? (
                 <div>
                   <Lottie
                     options={defaultOptions}
@@ -98,7 +195,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 </div>
               ) : (
                 <></>
-              )}
+              )} */}
               <Input
                 variant="filled"
                 bg="#E0E0E0"
@@ -106,7 +203,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 value={newMessage}
                 onChange={typingHandler}
               />
-            </FormControl> */}
+            </FormControl>
           </Box>
         </>
       ) : (
