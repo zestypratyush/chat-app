@@ -1,3 +1,14 @@
+Deployed at : https://thawing-taiga-67230.herokuapp.com/
+
+# Chatter 
+
+A web-based chat app built using node.js, react.js, express.js, mongoDB and socket.io. 
+
+#Features
+
+In this app we can chat in realtime and can create account and login using email id and password. It supports search feature to search registered user from anywhere in the world.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
